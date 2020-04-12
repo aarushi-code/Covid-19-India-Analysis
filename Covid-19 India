@@ -181,3 +181,41 @@ test1["perday_tests"] = test1["totalSamplesTested"].diff()
 test1["positive_ratio"]= np.round(100*test1["perday_positive"]/test1["perday_tests"],2)
 test1.fillna(0)
 test1.head(6)
+
+total_tested = test1["totalSamplesTested"][-1:].values[0]
+total_positive = test1["totalPositiveCases"][-1:].values[0]
+positivecase_ratio = total_positive * 100 / total_tested
+pcr = float("{:.2f}".format(positivecase_ratio))
+print('Total Number of people tested :', total_tested)
+print('Total Number of positive cases :',total_positive)
+print('Positive case ratio cases:',pcr)
+
+ac= data['Active cases'].sum()
+rvd = data['Cured/Discharged/Migrated'].sum()
+dth = data['Death'].sum()
+fig = go.Figure(data=[go.Pie(labels=['Active Cases','Cured','Death'],
+                             values= [ac,rvd,dth],hole =.3)])
+fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                  marker=dict(colors=['#2fcc41', 'yellow','#cc3c2f'], line=dict(color='#FFFFFF', width=2)))
+fig.update_layout(title_text='Current Situation in India according www.mohfw.gov.in',plot_bgcolor='rgb(275, 270, 273)')
+fig.show()
+ac= df_india['active'].sum()
+rvd = df_india['recovered'].sum()
+dth = df_india['deaths'].sum()
+fig = go.Figure(data=[go.Pie(labels=['Active Cases','Cured','Death'],
+                             values= [ac,rvd,dth],hole =.3)])
+fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                  marker=dict(colors=['#2fcc42', 'yellow','#cc3c2f'], line=dict(color='#FFFFFF', width=2)))
+fig.update_layout(title_text='Current Situation in India according www.covid19india.org',plot_bgcolor='rgb(275, 270, 273)')
+fig.show()
+
+tempa = p_df[['current_status','gender']].dropna()
+actv = tempa[tempa['current_status'] == 'Hospitalized']
+a_f = len(actv[actv['gender'] == 'F'])
+a_m = len(actv[actv['gender'] == 'M'])
+fig = go.Figure(data=[go.Pie(labels=['Male','Female'],
+                             values= [a_m,a_f],hole =.3)])
+fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                  marker=dict(colors=['dark yellow', 'red'], line=dict(color='#FFFFFF', width=2)))
+fig.update_layout(title_text='Gender wise Active Cases',plot_bgcolor='rgb(275, 270, 273)')
+fig.show()
